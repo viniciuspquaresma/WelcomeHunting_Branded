@@ -106,24 +106,26 @@ class Brandeado:
                     api = api + 1
             total = len(response_payments_json['results'])
             print(total)
-            if total == 0:
-                return 3
+            #if total == 0:
+            #    return 3
 
-            print('link: ' + str(branded_link * 100 / total))
-            print('pre: ' + str(branded_pref * 100 / total))
-            print('api: ' + str(api * 100 / total))
+            print('link: ' + str(round(branded_link * 100 / total, 2)))
+            print('pre: ' + str(round(branded_pref * 100 / total, 2)))
+            print('api: ' + str(round(api * 100 / total, 2)))
 
-            percent_link = 30
+            return str(round(branded_link * 100 / total, 2)) + ',' + str(round(branded_pref * 100 / total, 2)) + ',' + str(round(api * 100 / total, 2))
+
+            """percent_link = 30
             percent_pref = 10
             if (branded_link * 100 / total) > percent_link:
                 return 2
             elif (branded_pref * 100 / total) > percent_pref:
                 return 1
-            return 0
+            return 0"""
             
         else:
             # print('NAO TEM PAGAMENTO - '+ cust_id)    
-            return 3#,'NAO TEM PAGAMENTO (POSSIVELMENT MKT)'
+            return 'N/A,N/A,N/A'#,'NAO TEM PAGAMENTO (POSSIVELMENT MKT)'
 
     
     

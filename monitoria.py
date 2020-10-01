@@ -196,7 +196,7 @@ def mainBrandeadoCSV():
     novoArquivo = open("brandeado_upt.csv","w+", buffering=1)#csv.writer(open("brandeado_upt.csv", "a"))
     tokensProblema = csv.writer(open("brandeado_problema.csv", "a"))
     # CABECALHO
-    novoArquivo.write("Cust_id, IsBranded"+"\r\n")
+    novoArquivo.write("Cust_id, branded_link, branded_pref, api"+"\r\n")
     tokensProblema.writerow(["Cust_id", "IsBranded"])
     count = 1
     for linha in linhas:
