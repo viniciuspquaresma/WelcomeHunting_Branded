@@ -196,15 +196,16 @@ def mainBrandeadoCSV():
     novoArquivo = open("brandeado_upt.csv","w+", buffering=1)#csv.writer(open("brandeado_upt.csv", "a"))
     tokensProblema = csv.writer(open("brandeado_problema.csv", "a"))
     # CABECALHO
-    novoArquivo.write("Cust_id, branded_link, branded_pref, api"+"\r\n")
+    novoArquivo.write("Cust_id, api, branded_pref, branded_link"+"\r\n")
     tokensProblema.writerow(["Cust_id", "IsBranded"])
     count = 1
     for linha in linhas:
-        print('Analise do Cust - '+str(linha['Cust_id']))
+        print('Analise do Cust - '+str(linha['CUST']))
         try:
 
             #LEITURA DO ARQUIVO EXISTENTE
-            cust_id = linha["Cust_id"]
+            cust_id = linha["CUST"]
+            mkt = linha["MKT"]
 
             json_final = []
 
@@ -214,16 +215,16 @@ def mainBrandeadoCSV():
             print (" - Cust - "+str(cust_id))
 
             brand = Brandeado()
-            resultado_branded = brand.isBranded(str(cust_id))
+            resultado_branded = brand.isBranded(str(cust_id), str(mkt))
             count = count + 1
-            novoArquivo.write(str(linha["Cust_id"]) + ',' + str(resultado_branded) + "\r\n")
+            novoArquivo.write(str(linha["CUST"]) + ',' + str(resultado_branded) + "\r\n")
 
             print('isBranded: ' +str(resultado_branded))
             #time.sleep(3)
             print("----------------------")
         except Exception as e:
-            novoArquivo.write(str(linha["Cust_id"]) + ',' + 'ERRO' + "\r\n")
-            tokensProblema.writerow([linha["Cust_id"],'ERRO'])
+            novoArquivo.write(str(linha["CUST"]) + ',' + 'ERRO' + "\r\n")
+            tokensProblema.writerow([linha["CUST"],'ERRO'])
             print("ERRO"+str(e))
             json_final.append({'return': {
                 'exception': e

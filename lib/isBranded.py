@@ -35,12 +35,12 @@ class Brandeado:
         return conversao
     
     #VERIFICAR SE É BRANDED
-    def isBranded(self,cust_id):
+    def isBranded(self,cust_id, mkt):
         
         # global hoje
         # response_credentials = requests.get(url_credencial+str(application_id)+"/credentials?caller.id="+str(cust_id['cust_id']))
         # response_credentials_json = response_credentials.json()
-        begin_date = self.tratamentoData(int(10))
+        begin_date = self.tratamentoData(int(35))
         end_date = self.hoje.strftime('%d/%m/%Y %H:%M:%S')
     
         limit = '100'
@@ -51,9 +51,10 @@ class Brandeado:
         payload = {'collector.id': cust_id,
                     'operation_type': 'regular_payment', #-- ESTAVA DANDO INTERNAL SERVER ERROR
                     'limit': limit,
+                    'sort': 'date_created',
                     'criteria': 'desc',
                     'range': 'date_created',
-                    'marketplace': 'NONE',
+                    'marketplace': mkt,
                     'begin_date': begin_date.strftime('%Y-%m-%dT%H:%M:%S.999-04:00'),
                     'end_date': self.hoje.strftime('%Y-%m-%dT%H:%M:%S.999-04:00')}
     
@@ -71,11 +72,15 @@ class Brandeado:
         branded_link = 0
         api = 0
         retorno = 0
+        count_meli = 0
         #alterado aqui tbm
         if int(response_payments_json['paging']['total']) > 0:
             for payment in response_payments_json['results']:
                 retorno = 0
                 try:
+                    if payment['marketplace'] == "MELI":
+                        count_meli = count_meli + 1
+
                     #print(payment['id'])
                     #print(payment['internal_metadata'])
                     if(payment['internal_metadata']['preference']['id']):
@@ -112,8 +117,9 @@ class Brandeado:
             print('link: ' + str(round(branded_link * 100 / total, 2)))
             print('pre: ' + str(round(branded_pref * 100 / total, 2)))
             print('api: ' + str(round(api * 100 / total, 2)))
+            print('count_meli: ' + str(count_meli))
 
-            return str(round(branded_link * 100 / total, 2)) + ',' + str(round(branded_pref * 100 / total, 2)) + ',' + str(round(api * 100 / total, 2))
+            return str(round(api * 100 / total, 2)) + ',' + str(round(branded_pref * 100 / total, 2)) + ',' + str(round(branded_link * 100 / total, 2))
 
             """percent_link = 30
             percent_pref = 10
